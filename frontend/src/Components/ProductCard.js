@@ -1,5 +1,4 @@
 function ProductCard(props){
-
   return(
     <div className = "slider">
       <div className = "slides">
@@ -29,6 +28,7 @@ function ProductCard(props){
             )
           )     
         }
+        <button onClick = {props.onClick} index={props.index}>Edit Product</button>
       </div>
     </div>
   )

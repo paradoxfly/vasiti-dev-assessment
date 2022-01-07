@@ -1,6 +1,7 @@
 import ProductCard from "./ProductCard";
 import '../CSS/Carousel.css'
 import '../CSS/Product.css'
+import '../CSS/bootstrap.min.css'
 
 
 function Products (props){
@@ -18,7 +19,7 @@ function Products (props){
           {
             Array.from({length: props.products.length})
             .map((_, index) => (
-              <ProductCard product={props.products[index]} key = {index}/>
+              <ProductCard product={props.products[index]} key={index+1} index={index} onClick = {props.onClick}/>
             ))
           }
         </div>

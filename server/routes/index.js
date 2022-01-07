@@ -13,6 +13,9 @@ Client.connect((error, db) => {
   } 
 })
 
+// This helps convert the id from string to ObjectId for the _id.
+const ObjectId = require("mongodb").ObjectId;
+
 
 //Fetch all products from database
 router.get('/', async (request, response) => {
@@ -60,7 +63,7 @@ router.put('/', (request, response) => {
   Client.connect((error, db) => {
     if(db){
       let productsDB = db.db("products")
-      productsDB.collection("product-data").updateOne({product_name: request.body.product_name}, request.body, (error, result) => {
+      productsDB.collection("product-data").updateOne({_id: new ObjectId(request.body._id)}, request.body, (error, result) => {
         if(error) console.log(error)
         else {
           console.log("Successfully updated")

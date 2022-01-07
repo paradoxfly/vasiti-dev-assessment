@@ -9,11 +9,12 @@ import parseVarieties from '../Utils/parseVarieties'
 class UploadProduct extends React.Component {
   constructor(props){
     super(props)
+
     props.update ? 
     this.state = {
       numberOfVarieties: props.data.product_varieties.length,
       productName: props.data.product_name,
-      productDescription: props.data.product_name,
+      productDescription: props.data.product_description,
       dateUploaded: props.data.date_uploaded,
       dateEdited: props.data.date_edited,
       productVarietiesID: parseVarieties(props.data.product_varieties).varietiesID,
@@ -35,7 +36,7 @@ class UploadProduct extends React.Component {
     this.handleVarietiesChange = this.handleVarietiesChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleChange = this.handleChange.bind(this)
-    console.log(this.state)
+    // console.log(this.state)
   }
 
   handleVarietiesChange(event){
@@ -67,7 +68,9 @@ class UploadProduct extends React.Component {
       })
       
       let data = parseState(this.state)
+      if(this.props.update) data._id = this.props.data._id
       console.log(data)
+      
       let options
       this.props.update ?
       options = {

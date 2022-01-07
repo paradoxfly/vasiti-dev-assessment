@@ -10,7 +10,8 @@ class Seller extends React.Component{
     this.state = { 
       products: [], 
       fetched: false,
-      uploadProduct: false
+      uploadProduct: false,
+      index: 0
     }
 
     this.toggleUpload = this.toggleUpload.bind(this)
@@ -27,11 +28,13 @@ class Seller extends React.Component{
   }
 
   handleClick(event){
-    const parent = event.target.parentNode
-    const child = event.target
-    console.log(child)
-    console.log("__")
-    console.log(parent.children)
+    const index = event.target.getAttribute("index")
+    this.setState({
+      index: index,
+      uploadProduct: true,
+      update: true
+    })
+    
     // console.log(Array.prototype.indexOf.call(Children_of_parent, child))
 
   }
@@ -44,9 +47,10 @@ class Seller extends React.Component{
       <div>
         { 
           this.state.uploadProduct ? 
-          <>
+          
+          <>{console.log(this.state)}
             <button className="toggle-upload btn btn-outline-dark" onClick = { this.toggleUpload }>Display Products </button>
-            <UploadProduct update={false} data={this.state.products[3]}/> 
+            <UploadProduct update={this.state.update} data={this.state.products[this.state.index]}/> 
           </> :
           <>
             <button className="toggle-upload btn btn-outline-dark" onClick = { this.toggleUpload }>Upload New Product </button>
