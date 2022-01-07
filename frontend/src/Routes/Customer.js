@@ -1,5 +1,5 @@
 import React from 'react'
-import ProductCard from '../Components/ProductCard'
+import Products from '../Components/Products'
 
 class Customer extends React.Component{
   constructor(props){
@@ -24,7 +24,7 @@ class Customer extends React.Component{
   render(){
     return (
       <div>
-        <ProductCard products={this.state.products} loading={!this.state.fetched} seller={false}/>
+        <Products products={this.state.products} loading={!this.state.fetched} seller={false}/>
       </div>
     )
   }

@@ -1,5 +1,5 @@
 import React from 'react'
-import ProductCard from '../Components/ProductCard'
+import Products from '../Components/Products'
 import UploadProduct from '../Components/UploadProduct'
 import '../CSS/bootstrap.min.css'
 
@@ -14,6 +14,7 @@ class Seller extends React.Component{
     }
 
     this.toggleUpload = this.toggleUpload.bind(this)
+    this.handleClick = this.handleClick.bind(this)
   }
 
   componentDidMount(){
@@ -21,9 +22,18 @@ class Seller extends React.Component{
       .then(response => response.json())
       .then(data => {
         this.setState({ products: data, fetched: true })
-        console.log(data)
       })
       .catch(error => console.log(error))
+  }
+
+  handleClick(event){
+    const parent = event.target.parentNode
+    const child = event.target
+    console.log(child)
+    console.log("__")
+    console.log(parent.children)
+    // console.log(Array.prototype.indexOf.call(Children_of_parent, child))
+
   }
 
   toggleUpload(event){
@@ -36,11 +46,11 @@ class Seller extends React.Component{
           this.state.uploadProduct ? 
           <>
             <button className="toggle-upload btn btn-outline-dark" onClick = { this.toggleUpload }>Display Products </button>
-            <UploadProduct /> 
+            <UploadProduct update={false} data={this.state.products[3]}/> 
           </> :
           <>
             <button className="toggle-upload btn btn-outline-dark" onClick = { this.toggleUpload }>Upload New Product </button>
-            <ProductCard products={this.state.products} loading={!this.state.fetched} seller={true}/>
+            <Products products={this.state.products} loading={!this.state.fetched} seller={true} onClick = { this.handleClick }/>
           </>
           
         }

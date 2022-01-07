@@ -1,26 +1,37 @@
-import renderAllProducts from "../Utils/renderAllProducts";
-import parse from 'html-react-parser'
-import '../CSS/Carousel.css'
-import '../CSS/Product.css'
+function ProductCard(props){
 
-
-function ProductCard (props){
-  if(props.loading){
-    return(
-      <h3>Loading....</h3>
-    )
-  } else {
-    return(
-      <div>
-        <h2>{props.seller? "Uploaded": "Available"} Products</h2>
-        <h5>Use horizontal scroll-bar under product to see its variants</h5>
-        <div className="product-wrapper">
-          {parse(renderAllProducts(props.products))}
-        </div>
+  return(
+    <div className = "slider">
+      <div className = "slides">
+        {
+          Array.from({length: props.product.product_varieties.length})
+            .map((_, index) => (
+              <div className="product-card" key={index}>
+                <div className="badge">Hot</div>
+                <div className="product-tumb">
+                  <img src = {props.product.product_varieties[index]["images"][0]} alt=""/>
+                </div>
+                <div className="product-details">
+                  <h4>
+                    <a href="#">{props.product.product_name}</a>
+                  </h4>
+                  <span className="product-catagory">Size: {props.product.product_varieties[index]["size"]},   Color: {props.product.product_varieties[index]["color"]},   Quantity: {props.product.product_varieties[index]["quantity"]},</span>
+                  <p>{props.product.product_description}</p>
+                  <div className="product-bottom-details">
+                    <div className="product-price">Price:  {props.product.product_varieties[index]["price"]}</div>
+                    <div className="product-links">
+                      <a href=""><i className="fa fa-heart"></i></a>
+                      <a href=""><i className="fa fa-shopping-cart"></i></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )
+          )     
+        }
       </div>
+    </div>
   )
-  }
-  
 }
 
 export default ProductCard

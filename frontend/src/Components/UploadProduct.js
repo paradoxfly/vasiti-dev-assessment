@@ -4,10 +4,23 @@ import convertToBase64 from '../Utils/convertToBase64'
 import isReadyForSubmit from '../Utils/isReadyForSubmit'
 import parseState from '../Utils/parseState'
 import VariantForm from './VariantForm'
+import parseVarieties from '../Utils/parseVarieties'
 
 class UploadProduct extends React.Component {
   constructor(props){
     super(props)
+    props.update ? 
+    this.state = {
+      numberOfVarieties: props.data.product_varieties.length,
+      productName: props.data.product_name,
+      productDescription: props.data.product_name,
+      dateUploaded: props.data.date_uploaded,
+      dateEdited: props.data.date_edited,
+      productVarietiesID: parseVarieties(props.data.product_varieties).varietiesID,
+      productVarieties: parseVarieties(props.data.product_varieties).varieties,
+      displayNotReadyForSubmit: false,
+      uploadSuccessful: false
+    } :
     this.state = {
       numberOfVarieties: 1,
       productName: "",
@@ -22,6 +35,7 @@ class UploadProduct extends React.Component {
     this.handleVarietiesChange = this.handleVarietiesChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleChange = this.handleChange.bind(this)
+    console.log(this.state)
   }
 
   handleVarietiesChange(event){
@@ -54,13 +68,23 @@ class UploadProduct extends React.Component {
       
       let data = parseState(this.state)
       console.log(data)
-      let options = {
+      let options
+      this.props.update ?
+      options = {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      } :
+      options = {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(data)
       }
+
       fetch('http://localhost:5000', options)
         .then(response => response.json())
         .then(data => { 
@@ -75,11 +99,10 @@ class UploadProduct extends React.Component {
         displayNotReadyForSubmit: true
       })
     }
-    console.log(this.state)
   }
 
   async handleChange(event){
-    // console.log("id: " + event.target.id + "\n value: " + event.target.value)
+    console.log("id: " + event.target.id + "\n value: " + event.target.value)
     if((event.target.id === "productName")||(event.target.id === "productDescription")){
       this.setState({
         [event.target.id] : event.target.value
@@ -127,21 +150,21 @@ class UploadProduct extends React.Component {
         {this.state.displayNotReadyForSubmit? <small>All fields must be filled</small> : null  }
         <form>
           <div className="form-group">
-            <input type="email" className="form-control" placeholder="Product Name" id="productName" onChange={this.handleChange} />
+            <input type="email" className="form-control" placeholder="Product Name" id="productName" onChange={this.handleChange} value={this.state.productName} disabled={this.props.update ? true : false}/>
           </div>
           
           <div className="form-group">
-            <textarea className="form-control" rows="2" placeholder="Product Description" id="productDescription" onChange={this.handleChange} />
+            <textarea className="form-control" rows="2" placeholder="Product Description" id="productDescription" onChange={this.handleChange} value={this.state.productDescription}/>
           </div>
   
           <div className="form-group">
             <label>Number of varieties </label>
-            <input type="number" min="1" max="9" onChange= { this.handleVarietiesChange }/>
+            <input type="number" min="1" max="9" onChange= { this.handleVarietiesChange } value={this.state.numberOfVarieties}/>
           </div>
           {
             Array.from({length: this.state.numberOfVarieties})
                 .map((_, index) => (
-                    <VariantForm index={index} key={index} handleChange={this.handleChange}/>
+                    <VariantForm index={index} key={index} handleChange={this.handleChange} update={this.props.update} data = { {productVarieties: this.state.productVarieties, productVarietiesID: this.state.productVarietiesID}}/>
                 )
             )
           }
